@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toppery AML</title>
+    <!-- Google Font & Core CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Inline overrides per tema dark + tweak transazioni UI -->
+    <style>
+        :root{
+            --bg:#0d1117;
+            --bg-card:#161b22;
+            --border:#30363d;
+            --text:#e6edf3;
+            --accent:#238636;
+        }
+        body{font-family:'Roboto',sans-serif;background:var(--bg);color:var(--text);margin:0;}
+        h1,h2,h3{margin-top:0;color:var(--text);} /* uniform headings */
+        /* Container */
+        .container{max-width:1100px;margin:auto;padding:1.2rem;}
+        /* Card-like boxes (già usate altrove) */
+        .card,.risk-card,details{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:1rem;margin-bottom:1rem;}
+        .risk-card{display:inline-block;}
+        .risk-badge{padding:0.25rem 0.75rem;border-radius:6px;font-weight:600;}
+        .risk-low{background:#2ea043;color:#fff;}
+        .risk-medium{background:#e3b341;color:#000;}
+        .risk-high{background:#da3633;color:#fff;}
+        /* Navigation menu */
+        .nav-menu{display:flex;gap:0.75rem;flex-wrap:wrap;margin:1rem 0;}
+        .nav-menu button{appearance:none;border:none;background:var(--bg-card);color:var(--text);padding:0.5rem 1.1rem;font-weight:500;border-radius:8px;cursor:pointer;transition:background .2s ease;}
+        .nav-menu button:hover{background:#21262d;}
+        .nav-menu button.active{background:var(--accent);color:#fff;}
+        /* Sections */
+        .content-section{display:none;animation:fade .15s ease-out;}
+        .content-section.active{display:block;}
+        @keyframes fade{from{opacity:0}to{opacity:1}}
+        /* Collapsible details */
+        details summary{list-style:none;cursor:pointer;font-weight:600;}
+        details summary::-webkit-details-marker{display:none;}
+        details summary::after{content:"\25BC";float:right;transition:transform .2s;}
+        details[open] summary::after{transform:rotate(180deg);}
+        /* Listing frazionate */
+        .frazionata-mov{background:var(--bg-card);border:1px solid var(--border);color:var(--text);}
+        /* -------- Nuovo layout file‑input Transazioni -------- */
+        .file-input-row{display:flex;flex-wrap:wrap;gap:1rem;align-items:flex-end;}
+        .file-label{display:flex;flex-direction:column;font-size:0.85rem;}
+        .file-label input{margin-top:0.25rem;max-width:220px;}
+        button:disabled{opacity:.5;cursor:not-allowed;}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Toppery AML</h1>
+
+        <!-- Navigation Menu -->
+        <nav class="nav-menu">
+            <button class="menu-item active" data-target="frazionate">Frazionate</button>
+            <button class="menu-item" data-target="sessioni">Sessioni notturne</button>
+            <button class="menu-item" data-target="grafici">Grafici</button>
+            <button class="menu-item" data-target="transazioni">Transazioni</button>
+            <button class="menu-item" data-target="importanti">Movimenti importanti</button>
+        </nav>
+
+        <!-- FRAZIONATE SECTION (resto invariato) -->
+        
+<!-- MOVIMENTI IMPORTANTI SECTION -->
+<section id="importanti" class="content-section">
+    <div class="card">
+        <h3>Movimenti importanti</h3>
+        <div id="movimentiImportantiSection"></div>
+    </div>
+</section>
+
+<section id="frazionate" class="content-section active">
+            <details>
+                <summary>Frazionate rilevate</summary>
+                <div id="frazionateSection"></div>
+            </details>
+            <div class="card">
+                <h3>Motivazioni del rischio</h3>
+                <ul id="motivationsList"></ul>
+            </div>
+            <div class="card">
+                <h3>Pattern rilevati</h3>
+                <div id="patternsSection"></div>
+            </div>
+                 <div class="risk-card">
+            <h3 style="margin-top:0">Livello di rischio:</h3>
+            <div id="riskBadge" class="risk-badge">Loading...</div>
+            <p style="margin:0">Score: <span id="riskScore"></span>/100</p>
+        </div>
+    </div>
+        </section>
+
+        <!-- SESSIONI NOTTURNE SECTION -->
+        <section id="sessioni" class="content-section">
+            <h2>Sessioni Notturne</h2>
+            <p id="nightSessionStat">Calcolo in corso...</p>
+            <canvas id="hourHeatmap" width="400" height="200"></canvas>
+        </section>
+
+        <!-- GRAFICI SECTION -->
+        <section id="grafici" class="content-section">
+            <div class="card">
+                <h3>Timeline movimenti (frazionate)</h3>
+                <canvas id="timelineChart"></canvas>
+            </div>
+            <div class="card">
+                <h3>Distribuzione movimenti</h3>
+                <canvas id="causaliChart"></canvas>
+            </div>
+        </section>
+
+        <!-- TRANSAZIONI SECTION -->
+ <section id="transazioni" class="content-section">
+            <h2>Analisi Transazioni</h2>
+     <h3> Transazioni Carte <input id="cardFileInput" type="file" accept=".xlsx,.xls,.csv"> </h3>
+<h3> Depositi <input id="depositFileInput" type="file" accept=".xlsx,.xls,.csv"> </h3>
+<h3> Prelievi <input id="withdrawFileInput" type="file" accept=".xlsx,.xls,.csv"> </h3>
+<button id="analyzeBtn" disabled>Analizza</button>
+
+<div id="depositResult" class="hidden"></div>
+<div id="withdrawResult" class="hidden"></div>
+<div id="transactionsResult" class="hidden"></div>
+        </section>
+
+        <!-- RISK CARD (sempre visibile) -->
+   
+
+    
+<style>
+/* ---- CAUSALI MODAL (pie click) ---- */
+.causali-modal[hidden]{display:none!important;}
+.causali-modal{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:0.9rem;
+}
+.causali-modal-backdrop{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.65);
+}
+.causali-modal-content{
+  position:relative;
+  max-width:700px;
+  width:90%;
+  max-height:80vh;
+  overflow:auto;
+  background:var(--bg-card,#161b22);
+  color:var(--fg,#e6edf3);
+  border:1px solid var(--border,#30363d);
+  border-radius:8px;
+  padding:1rem 1.25rem 1.5rem;
+  box-shadow:0 0 0 2px var(--accent,#1f6feb);
+}
+.causali-modal-close{
+  position:absolute;
+  top:.25rem;
+  right:.5rem;
+  border:none;
+  background:transparent;
+  color:inherit;
+  font-size:1.25rem;
+  cursor:pointer;
+  line-height:1;
+}
+.causali-modal-body{
+  margin-top:1rem;
+}
+.causali-modal-body table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:0.85rem;
+}
+.causali-modal-body th,
+.causali-modal-body td{
+  border:1px solid var(--border,#30363d);
+  padding:4px 6px;
+}
+.causali-modal-body thead th{
+  position:sticky;
+  top:0;
+  background:var(--bg,#0d1117);
+  z-index:1;
+}
+.causali-modal-body tbody tr:nth-child(even){
+  background:rgba(255,255,255,.04);
+}
+.causali-modal-body tbody tr:hover{
+  background:rgba(255,255,255,.08);
+}
+</style>
+
+<!-- ===== Popup Dettaglio Causali Pie ===== -->
+<div id="causaliModal" class="causali-modal" hidden>
+  <div class="causali-modal-backdrop" data-close="1"></div>
+  <div class="causali-modal-content">
+    <button id="causaliModalClose" class="causali-modal-close" aria-label="Chiudi">×</button>
+    <h3 id="causaliModalTitle">Dettaglio movimenti</h3>
+    <div class="causali-modal-body">
+      <table id="causaliModalTable" class="table-transactions">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Movimento</th>
+            <th style="text-align:right">Importo</th>
+          </tr>
+        </thead>
+        <tbody><!-- rows injected --></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- ===== /Popup Dettaglio Causali Pie ===== -->
+
+<!-- LIBS & SCRIPTS -->
+    <script src="polyfill.js"></script>
+<script src="libs/chart.min.js"></script>
+    <script src="libs/xlsx.full.min.js"></script>
+    <script src="analysis.js"></script>
+    <script src="transactions.js"></script>
+    <script src="accessi.js"></script>
+
+<style id="causaliModalFix">
+/* Override / fix header visibility & stickiness */
+#causaliModal .causali-modal-body{max-height:60vh;overflow-y:auto;}
+#causaliModal .causali-modal-body thead th{color:var(--fg,#e6edf3)!important;font-weight:600;position:sticky;top:0;z-index:2;}
+#causaliModal .causali-modal-body thead{position:sticky;top:0;z-index:2;}
+</style>
+
+</body>
+</html>

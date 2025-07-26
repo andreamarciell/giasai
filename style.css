@@ -1,0 +1,83 @@
+
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    background-color: #f4f6f9;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.risk-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.risk-badge {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-size: 1.6em;
+    font-weight: bold;
+    color: #fff;
+    margin-top: 10px;
+}
+
+.risk-low {
+    background-color: #4caf50;
+}
+
+.risk-medium {
+    background-color: #ff9800;
+}
+
+.risk-high {
+    background-color: #f44336;
+}
+
+ul {
+    padding-left: 20px;
+}
+
+canvas {
+    max-width: 100%;
+    height: auto;
+}
+
+.frazionata-mov {
+    margin-bottom: 8px;
+    padding: 8px;
+    background-color: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+/* style for transactions table */
+.table-transactions { width:100%; border-collapse:collapse; font-size:0.85rem; }
+.table-transactions th, .table-transactions td { border:1px solid #ddd; padding:4px 6px; text-align:left; }
+.table-transactions th { background:#f0f0f0; }
+
+.table-transactions thead th { background:#ffffff; color:#000; position:sticky; top:0; }
+
+.details ul{margin:0 0 0 1rem;}
