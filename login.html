@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login – Toppery AML</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:Roboto,Arial,Helvetica,sans-serif;background:#0d1117;color:#e6edf3;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;margin:0}
+    form{background:#161b22;padding:2rem;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.6);min-width:280px}
+    h2{margin-top:0;margin-bottom:1.5rem;text-align:center}
+    input{width:100%;padding:.5rem .75rem;margin-bottom:1rem;border:1px solid #30363d;border-radius:6px;background:#0d1117;color:#e6edf3}
+    button{width:100%;padding:.6rem;border:none;border-radius:6px;background:#238636;color:#fff;font-weight:600;cursor:pointer}
+    button:disabled{opacity:.6;cursor:not-allowed}
+    p#error{color:#f85149;margin-top:1rem;min-height:1.25rem}
+  </style>
+  <script type="module" src="auth.js"></script>
+</head>
+<body>
+  <form id="loginForm">
+    <h2>Accedi</h2>
+    <input id="email" type="email" placeholder="Email" required />
+    <input id="pwd" type="password" placeholder="Password" required />
+    <button type="submit" id="btnSubmit">Entra</button>
+    <p id="error"></p>
+  </form>
+
+<script type="module">
+  import { supabase } from "./auth.js";
+
+  const form = document.getElementById('loginForm');
+  const errorP = document.getElementById('error');
+  const btn = document.getElementById('btnSubmit');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    btn.disabled = true;
+    errorP.textContent = '';
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('pwd').value;
+
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error){
+      errorP.textContent = error.message;
+      btn.disabled = false;
+      return;
+    }
+    // Success → redirect
+    const params = new URLSearchParams(location.search);
+    const dest = params.get('redirect') || 'index.html';
+    location.replace(dest);
+  });
+</script>
+</body>
+</html>

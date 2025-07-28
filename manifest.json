@@ -1,0 +1,26 @@
+{
+  "name": "Toppery AML Secure",
+  "description": "Toppery AML con autenticazione Supabase.",
+  "version": "1.0.0",
+  "manifest_version": 3,
+  "icons": { "128": "icon.png" },
+  "permissions": [
+    "storage",
+    "notifications"
+  ],
+  "host_permissions": [
+    "https://*.supabase.co/*"
+  ],
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": {
+      "128": "icon.png"
+    }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["login.html", "auth.js"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
